@@ -53,10 +53,11 @@ jobs:
           poetry build
 
       # https://github.com/pypa/gh-action-pypi-publish
-      - name: publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+      # different account
+      #- name: publish to Test PyPI
+      #  uses: pypa/gh-action-pypi-publish@release/v1
+      #  with:
+      #    user: __token__
+      #    password: ${{ secrets.pypi_password }}
+      #    repository_url: https://test.pypi.org/legacy/
+      #    skip_existing: true
