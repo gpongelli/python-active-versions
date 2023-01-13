@@ -25,10 +25,10 @@ def _fetch_tags(package: str, version: str) -> List:
     _next_page = True
     _page = 1
     while _next_page:
-        logging.debug("Fetching docker tags for %s %s , page %s" % package, version, _page)
+        logging.debug("Fetching docker tags for %s %s , page %s", package, version, _page)
         result = requests.get(
             f"https://registry.hub.docker.com/v2/repositories/library/{package}/tags?" f"name={version}&page={_page}",
-            timeout=120
+            timeout=120,
         )
         _json = result.json()
         if not _json['next']:
@@ -61,7 +61,7 @@ def _configure_logger(level):
     )
 
 
-def get_active_python_versions(docker_images=False, log_level='INFO') -> List[dict]:
+def get_active_python_versions(docker_images=False, log_level='INFO') -> List[dict]:  # pylint: disable=too-many-locals
     """Get active python versions.
 
     Arguments:
@@ -78,7 +78,7 @@ def get_active_python_versions(docker_images=False, log_level='INFO') -> List[di
     _r = HTMLSession().get("https://devguide.python.org/versions/")
     version_table = _r.html.find(version_table_selector, first=True)
 
-    # match development information with latest downloadable release
+    # match development information with the latest downloadable release
     _py_specific_release = ".download-list-widget li"
     _r = HTMLSession().get("https://www.python.org/downloads/")
     spec_table = _r.html.find(_py_specific_release)
@@ -87,8 +87,10 @@ def get_active_python_versions(docker_images=False, log_level='INFO') -> List[di
     for ver in version_table.find("tbody tr"):
         branch, _, _, first_release, end_of_life, _ = [v.text for v in ver.find("td")]
 
-        logging.debug("Found Python branch: %s" % branch)
-        _matching_version = list(filter(lambda d: d.startswith(branch), _downloadable_versions))
+        logging.debug("Found Python branch: %s", branch)
+        _matching_version = list(
+            filter(lambda d: d.startswith(branch), _downloadable_versions)  # pylint: disable=cell-var-from-loop
+        )
         _latest_sw = branch
         if _matching_version:
             _latest_sw = _matching_version[0]
