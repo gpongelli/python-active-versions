@@ -56,7 +56,7 @@ jobs:
       - name: publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: ${{ secrets.pypi_username }}
+          user: __token__
           password: ${{ secrets.pypi_password }}
           repository_url: https://test.pypi.org/legacy/
           skip_existing: true
