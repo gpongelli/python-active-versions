@@ -25,7 +25,7 @@ def _fetch_tags(package: str, version: str) -> List:
     _next_page = True
     _page = 1
     while _next_page:
-        logging.debug("Fetching docker tags for %s %s , page %s", package, version, _page)
+        logging.info("Fetching docker tags for %s %s , page %s", package, version, _page)
         result = requests.get(
             f"https://registry.hub.docker.com/v2/repositories/library/{package}/tags?" f"name={version}&page={_page}",
             timeout=120,
@@ -87,7 +87,7 @@ def get_active_python_versions(docker_images=False, log_level='INFO') -> List[di
     for ver in version_table.find("tbody tr"):
         branch, _, _, first_release, end_of_life, _ = [v.text for v in ver.find("td")]
 
-        logging.debug("Found Python branch: %s", branch)
+        logging.info("Found Python branch: %s", branch)
         _matching_version = list(
             filter(lambda d: d.startswith(branch), _downloadable_versions)  # pylint: disable=cell-var-from-loop
         )
