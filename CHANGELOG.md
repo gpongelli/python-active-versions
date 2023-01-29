@@ -1,3 +1,13 @@
+## 1.2.0 (2023-01-29)
+
+### Feat
+
+- add multithreading
+
+### Fix
+
+- updated classifier
+
 ## 1.1.1 (2023-01-26)
 
 ### Fix
