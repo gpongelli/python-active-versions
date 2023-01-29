@@ -4,6 +4,7 @@
 
 """Main module."""
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
 import requests
@@ -84,7 +85,7 @@ def get_active_python_versions(docker_images=False, log_level='INFO') -> List[di
     spec_table = _r.html.find(_py_specific_release)
     _downloadable_versions = [li.find('span a', first=True).text.split(' ')[1] for li in spec_table]
 
-    for ver in version_table.find("tbody tr"):
+    def worker(ver):
         branch, _, _, first_release, end_of_life, _ = [v.text for v in ver.find("td")]
 
         logging.info("Found Python branch: %s", branch)
@@ -100,5 +101,8 @@ def get_active_python_versions(docker_images=False, log_level='INFO') -> List[di
             _d['docker_images'] = _fetch_tags('python', _latest_sw)
 
         versions.append(_d)
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        executor.map(worker, version_table.find("tbody tr"))
 
     return versions
