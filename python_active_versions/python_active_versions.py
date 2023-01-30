@@ -62,8 +62,8 @@ def _configure_logger(level: str) -> None:
     )
 
 
-def get_active_python_versions(docker_images: bool = False,
-                               log_level: str = 'INFO'
+def get_active_python_versions(
+    docker_images: bool = False, log_level: str = 'INFO'
 ) -> List[dict]:  # pylint: disable=too-many-locals
     """Get active python versions.
 
