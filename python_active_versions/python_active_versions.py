@@ -40,7 +40,7 @@ def _fetch_tags(package: str, version: str) -> List:
     return _names
 
 
-def _configure_logger(level):
+def _configure_logger(level: str) -> None:
     """Configure logger facility from server or client in same way, changing only the output file.
 
     Arguments:
@@ -62,7 +62,9 @@ def _configure_logger(level):
     )
 
 
-def get_active_python_versions(docker_images=False, log_level='INFO') -> List[dict]:  # pylint: disable=too-many-locals
+def get_active_python_versions(docker_images: bool = False,
+                               log_level: str = 'INFO'
+) -> List[dict]:  # pylint: disable=too-many-locals
     """Get active python versions.
 
     Arguments:
