@@ -1,3 +1,9 @@
+## 1.2.1 (2023-01-30)
+
+### Fix
+
+- include py.typed files for mypy execution
+
 ## 1.2.0 (2023-01-29)
 
 ### Feat
