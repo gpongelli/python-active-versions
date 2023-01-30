@@ -26,7 +26,6 @@
     ]
     packages = [
         { include = "python_active_versions" },
-        { include = "python_active_versions/py.typed"},
         { include = "tests", format = "sdist" },
     ]
 
