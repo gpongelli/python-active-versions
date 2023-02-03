@@ -4,7 +4,7 @@
 
 [tool.poetry]
     name = "python-active-versions"
-    version = "1.4.0"
+    version = "1.5.0"
     homepage = "https://github.com/gpongelli/python-active-versions"
     repository = "https://github.com/gpongelli/python-active-versions"
     documentation = "https://gpongelli.github.io/python-active-versions/"
@@ -49,8 +49,8 @@
             pip  = "^22.3.1"
             black  = "^22.0"
             isort  = [
-                { version = "^5.11.5" , python = ">=3.8" },
-                { version = "^5.11.4" , python = "<3.8" }
+                { version = "^5.11.5",  python = ">=3.8" },
+                { version = "^5.11.4",  python = "<3.8" }
             ]
             flake8  = "^3.9.2"
             flake8-docstrings = "^1.6.0"
@@ -116,7 +116,7 @@
 
 [tool.commitizen]
     name = "cz_conventional_commits"
-    version = "1.4.0"
+    version = "1.5.0"
     version_files = [
         "python_active_versions/__init__.py:__version__",
         "pyproject.toml:version"

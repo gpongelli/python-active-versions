@@ -1,3 +1,13 @@
+## 1.5.0 (2023-02-03)
+
+### Feat
+
+- support since python3.7
+
+### Fix
+
+- set different dependencies for python3.7
+
 ## 1.4.0 (2023-02-03)
 
 ### Feat
