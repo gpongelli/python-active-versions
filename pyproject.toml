@@ -19,6 +19,7 @@
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
@@ -36,7 +37,7 @@
         "Source" = "https://github.com/gpongelli/python-active-versions"
 
     [tool.poetry.dependencies]
-        python = ">=3.8.0,<4.0"
+        python = ">=3.7.0,<4.0"
         requests = "^2.28.2"
         requests-html = "^0.10.0"
         cloup = "^2.0.0"
@@ -47,7 +48,10 @@
         [tool.poetry.group.devel.dependencies]
             pip  = "^22.3.1"
             black  = "^22.0"
-            isort  = "^5.8.0"
+            isort  = [
+                { version = "^5.11.5" , python = ">=3.8" },
+                { version = "^5.11.4" , python = "<3.8" }
+            ]
             flake8  = "^3.9.2"
             flake8-docstrings = "^1.6.0"
             mypy = "^0.961"
@@ -67,7 +71,10 @@
             bandit = "^1.7.4"
             yamllint = "^1.26.3"
             codespell = "^2.1.0"
-            pylint = "^2.14.3"
+            pylint = [
+                { version = "^2.16.1", python = ">=3.7.2"},
+                { version = "^2.13.9", python = "<3.7.2"}
+            ]
             types-termcolor = "^1.1.5"
             types-setuptools = "^65.3.0"
             reuse = "^1.1.0"
