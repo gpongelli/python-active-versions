@@ -1,3 +1,11 @@
+## 1.4.0 (2023-02-03)
+
+### Feat
+
+- adding tests
+- adding CLI tool
+- adding cloup and cli call
+
 ## 1.3.0 (2023-01-30)
 
 ### Feat
