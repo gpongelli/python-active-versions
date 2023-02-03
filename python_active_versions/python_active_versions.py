@@ -10,6 +10,8 @@ from typing import List
 import requests
 from requests_html import HTMLSession
 
+from python_active_versions.utility import configure_logger
+
 
 def _fetch_tags(package: str, version: str) -> List:
     """Fetch available docker tags.
@@ -40,28 +42,6 @@ def _fetch_tags(package: str, version: str) -> List:
     return _names
 
 
-def _configure_logger(level: str) -> None:
-    """Configure logger facility from server or client in same way, changing only the output file.
-
-    Arguments:
-        level: level of logging facility
-    """
-    # configure logging
-    _log_level = logging.INFO
-    if level.lower() == 'debug':
-        _log_level = logging.DEBUG
-    elif level.lower() == 'warning':
-        _log_level = logging.WARNING
-    elif level.lower() == 'error':
-        _log_level = logging.ERROR
-
-    logging.basicConfig(
-        level=_log_level,
-        format='%(asctime)s [%(levelname)s - %(filename)s:%(lineno)d]    %(message)s',
-        handlers=None,
-    )
-
-
 def get_active_python_versions(
     docker_images: bool = False, log_level: str = 'INFO'
 ) -> List[dict]:  # pylint: disable=too-many-locals
@@ -74,7 +54,7 @@ def get_active_python_versions(
     Returns:
         dict containing all information of active python versions.
     """
-    _configure_logger(log_level)
+    configure_logger(log_level)
     versions = []
     version_table_selector = "#status-of-python-versions table"
 
