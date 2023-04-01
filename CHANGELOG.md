@@ -1,3 +1,9 @@
+## 1.7.0 (2023-04-02)
+
+### Feat
+
+- use requests-html as develop for pypi upload
+
 ## 1.6.0 (2023-04-01)
 
 ### Feat
