@@ -1,3 +1,9 @@
+## 1.6.0 (2023-04-01)
+
+### Feat
+
+- use requests-html project that does not use bs4 package but beautifulsoup4
+
 ## 1.5.0 (2023-02-03)
 
 ### Feat
