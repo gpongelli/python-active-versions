@@ -1957,7 +1957,7 @@ category = "main"
 optional = false
 python-versions = ">=3.6.0"
 files = []
-develop = false
+develop = true
 
 [package.dependencies]
 beautifulsoup4 = "*"
@@ -1971,8 +1971,8 @@ w3lib = "*"
 [package.source]
 type = "git"
 url = "https://github.com/psf/requests-html.git"
-reference = "v0.10.0"
-resolved_reference = "c561e9bc6914fefad65a803d11b55d301b2c8b3f"
+reference = "HEAD"
+resolved_reference = "87a047d4adb37125004ab52d763e6294db4d9b6f"
 
 [[package]]
 name = "requests-toolbelt"
@@ -2804,4 +2804,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
         python-versions = ">=3.7.0,<4.0"
-content-hash = "993321e50ebd9d85bc73759964e7cc2b73fd9be748dcec7ba44f88fb18b40c2e"
+content-hash = "1e9ef3420f3e9752a268e77e3e1f68be44faa1f8fb89430e6a4d27b9ff642c97"

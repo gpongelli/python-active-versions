@@ -40,7 +40,8 @@
         python = ">=3.7.0,<4.0"
         requests = "^2.28.2"
         cloup = "^2.0.0"
-        requests-html = { git = "https://github.com/psf/requests-html.git", tag="v0.10.0" }
+        # develop to upload on pypi
+        requests-html = { git = "https://github.com/psf/requests-html.git", develop=true }
 
 
     [tool.poetry.group.devel]
