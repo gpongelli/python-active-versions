@@ -1,3 +1,9 @@
+## 1.8.0 (2023-04-02)
+
+### Feat
+
+- revert to published requests-html or pypi rejects, installing explicitly beautifulsoup4
+
 ## 1.7.0 (2023-04-02)
 
 ### Feat
