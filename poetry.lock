@@ -244,6 +244,20 @@ files = [
 ]
 
 [[package]]
+name = "bs4"
+version = "0.0.1"
+description = "Dummy package for Beautiful Soup"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "bs4-0.0.1.tar.gz", hash = "sha256:36ecea1fd7cc5c0c6e4a1ff075df26d50da647b75376626cc186e2212886dd3a"},
+]
+
+[package.dependencies]
+beautifulsoup4 = "*"
+
+[[package]]
 name = "certifi"
 version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1956,23 +1970,19 @@ description = "HTML Parsing for Humans."
 category = "main"
 optional = false
 python-versions = ">=3.6.0"
-files = []
-develop = true
+files = [
+    {file = "requests-html-0.10.0.tar.gz", hash = "sha256:7e929ecfed95fb1d0994bb368295d6d7c4d06b03fcb900c33d7d0b17e6003947"},
+    {file = "requests_html-0.10.0-py3-none-any.whl", hash = "sha256:cb8a78cf829c4eca9d6233f28524f65dd2bfaafb4bdbbc407f0a0b8f487df6e2"},
+]
 
 [package.dependencies]
-beautifulsoup4 = "*"
+bs4 = "*"
 fake-useragent = "*"
 parse = "*"
 pyppeteer = ">=0.0.14"
 pyquery = "*"
 requests = "*"
 w3lib = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/psf/requests-html.git"
-reference = "HEAD"
-resolved_reference = "87a047d4adb37125004ab52d763e6294db4d9b6f"
 
 [[package]]
 name = "requests-toolbelt"
@@ -2804,4 +2814,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
         python-versions = ">=3.7.0,<4.0"
-content-hash = "1e9ef3420f3e9752a268e77e3e1f68be44faa1f8fb89430e6a4d27b9ff642c97"
+content-hash = "aef6da89f30aed44a1ed10e891b3b668fc68ee5e2ac19071a5a6562d913d1bd7"
