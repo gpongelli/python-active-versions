@@ -1,3 +1,13 @@
+## 1.9.0 (2024-02-22)
+
+### Feat
+
+- update cloup dependency
+
+### Fix
+
+- github action warning
+
 ## 1.8.0 (2023-04-02)
 
 ### Feat
