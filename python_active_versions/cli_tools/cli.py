@@ -55,7 +55,7 @@ formatter_settings = HelpFormatter.settings(
 )
 @click.version_option(__version__)
 def get_python_versions(loglevel: str, docker: bool):
-    """Python extension for Code128 barcode generator library cli script.
+    """Cli script to show which are currently active python versions.
 
     Arguments:
         loglevel: set log level.
