@@ -4,7 +4,7 @@
 
 [tool.poetry]
     name = "python-active-versions"
-    version = "1.9.0"
+    version = "1.9.1"
     homepage = "https://github.com/gpongelli/python-active-versions"
     repository = "https://github.com/gpongelli/python-active-versions"
     documentation = "https://gpongelli.github.io/python-active-versions/"
@@ -119,7 +119,7 @@
 
 [tool.commitizen]
     name = "cz_conventional_commits"
-    version = "1.9.0"
+    version = "1.9.1"
     version_files = [
         "python_active_versions/__init__.py:__version__",
         "pyproject.toml:version"
