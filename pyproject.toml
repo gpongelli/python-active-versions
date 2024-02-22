@@ -39,7 +39,7 @@
     [tool.poetry.dependencies]
         python = ">=3.7.0,<4.0"
         requests = "^2.28.2"
-        cloup = "^2.0.0"
+        cloup = "^3.0.0"
         # revert using requests-html that has bs4 as dependency, waiting the original project,
         #  meanwhile trying to install also beautifusoup4
         requests-html = "^0.10.0"
