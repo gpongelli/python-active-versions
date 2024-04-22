@@ -4,7 +4,7 @@
 
 """Main module."""
 import logging
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List
 
 import requests
@@ -43,13 +43,14 @@ def _fetch_tags(package: str, version: str) -> List:
 
 
 def get_active_python_versions(
-    docker_images: bool = False, log_level: str = 'INFO'
+    docker_images: bool = False, log_level: str = 'INFO', no_main: bool = True
 ) -> List[dict]:  # pylint: disable=too-many-locals
     """Get active python versions.
 
     Arguments:
         docker_images: flag to return also available docker images
         log_level: string indicating log level on stdout
+        no_main: Filter out "main" branch that has no explicit version numbering.
 
     Returns:
         dict containing all information of active python versions.
@@ -67,8 +68,11 @@ def get_active_python_versions(
     spec_table = _r.html.find(_py_specific_release)
     _downloadable_versions = [li.find('span a', first=True).text.split(' ')[1] for li in spec_table]
 
-    def worker(ver):
+    def worker(ver, no_main_branch):
         branch, _, _, first_release, end_of_life, _ = [v.text for v in ver.find("td")]
+
+        if no_main_branch is True and branch == 'main':
+            return
 
         logging.info("Found Python branch: %s", branch)
         _matching_version = list(
@@ -85,6 +89,7 @@ def get_active_python_versions(
         versions.append(_d)
 
     with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.map(worker, version_table.find("tbody tr"))
+        futures = [executor.submit(worker, tr, no_main) for tr in version_table.find("tbody tr")]
+        as_completed(futures, 10)
 
     return versions

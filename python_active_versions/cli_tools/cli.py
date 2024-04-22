@@ -5,6 +5,8 @@
 """Console script for python-active-versions."""
 
 import inspect
+import os
+import sys
 import types
 from typing import Any, Callable, TypeVar, cast
 
@@ -53,14 +55,45 @@ formatter_settings = HelpFormatter.settings(
         help="Get Docker image info.",
     ),
 )
+@option_group(
+    "Filtering Results",
+    option(
+        '-m',
+        '--main',
+        'get_main',
+        is_flag=True,
+        type=click.BOOL,
+        default=True,
+        show_default=True,
+        help="Remove main branch.",
+    ),
+    option(
+        '-r',
+        '--no-stdout',
+        'no_stdout',
+        is_flag=True,
+        type=click.BOOL,
+        default=False,
+        show_default=True,
+        help="Redirect stdout to /dev/null.",
+    ),
+)
 @click.version_option(__version__)
-def get_python_versions(loglevel: str, docker: bool):
+def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: bool):
     """Cli script to show which are currently active python versions.
 
     Arguments:
         loglevel: set log level.
         docker: Include also info coming from docker's python active images.
+        get_main: Returns also "main" branch that has no explicit version numbering.
+        no_stdout: Skip stdout print.
     """
+    # https://stackoverflow.com/questions/6735917/redirecting-stdout-to-nothing-in-python
+    # redirecting stdout to dev null so no click.echo is displayed
+    if no_stdout:
+        f = open(os.devnull, 'w')
+        sys.stdout = f
+
     _fnc_name = cast(types.FrameType, inspect.currentframe()).f_code.co_name
     _complete_doc = inspect.getdoc(eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307
     _doc = f"{_complete_doc}".split('\n')[0]  # use only doc first row
@@ -71,7 +104,7 @@ def get_python_versions(loglevel: str, docker: bool):
     configure_logger(loglevel)
 
     click.echo("\nPython version found:")
-    for _v in get_active_python_versions(docker, loglevel):
+    for _v in get_active_python_versions(docker, loglevel, get_main):
         click.echo(f"  Version: {_v['version']}")
         click.echo(f"  Latest Software Version: {_v['latest_sw']}")
         if 'docker_images' in _v and _v['docker_images']:
