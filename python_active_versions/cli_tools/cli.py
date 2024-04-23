@@ -29,7 +29,7 @@ formatter_settings = HelpFormatter.settings(
 )
 
 
-@click.command()
+@click.command(name="get_python_versions")
 @option_group(
     "Generic Options",
     option(
@@ -109,7 +109,7 @@ def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: 
         click.echo(f"  Latest Software Version: {_v['latest_sw']}")
         if 'docker_images' in _v and _v['docker_images']:
             click.echo('  Docker images:')
-            _spaced = list(map(lambda x: f"    {x}", _v['docker_images']))
+            _spaced = [f"    {x}" for x in _v['docker_images']]
             click.echo("\n".join(_spaced))
 
         click.echo("-" * len(_str))

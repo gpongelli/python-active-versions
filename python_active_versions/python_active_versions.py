@@ -30,7 +30,7 @@ def _fetch_tags(package: str, version: str) -> List:
     while _next_page:
         logging.info("Fetching docker tags for %s %s , page %s", package, version, _page)
         result = requests.get(
-            f"https://registry.hub.docker.com/v2/repositories/library/{package}/tags?" f"name={version}&page={_page}",
+            f"https://registry.hub.docker.com/v2/repositories/library/{package}/tags?name={version}&page={_page}",
             timeout=120,
         )
         _json = result.json()
