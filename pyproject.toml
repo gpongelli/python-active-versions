@@ -50,7 +50,10 @@
     [tool.poetry.group.devel]
         optional = true
         [tool.poetry.group.devel.dependencies]
-            pip  = "^22.3.1"
+            pip  = [
+                { version = "^24.0",  python = ">=3.12" },
+                { version = "^22.3.1",  python = "<3.12" }
+            ]
             black  = "^22.0"
             isort  = [
                 { version = "^5.11.5",  python = ">=3.8" },
@@ -84,6 +87,9 @@
             reuse = "^1.1.0"
             types-requests = "^2.28.11.7"
             ruff = "^0.1.13"
+            setuptools = [
+                { version = "^69.5.1", python = ">=3.12" }
+            ]
 
     [tool.poetry.scripts]
         python-active-versions = 'python_active_versions.cli_tools.cli:get_python_versions'
