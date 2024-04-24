@@ -8,6 +8,7 @@ import inspect
 import os
 import sys
 import types
+from ast import literal_eval
 from typing import Any, Callable, TypeVar, cast
 
 import click
@@ -81,22 +82,21 @@ formatter_settings = HelpFormatter.settings(
 @click.version_option(__version__)
 def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: bool):
     """Cli script to show which are currently active python versions.
-
     \f
     Arguments:
         loglevel: set log level.
         docker: Include also info coming from docker's python active images.
         get_main: Returns also "main" branch that has no explicit version numbering.
         no_stdout: Skip stdout print.
-    """
+    """  # noqa: D205,D301
     # https://stackoverflow.com/questions/6735917/redirecting-stdout-to-nothing-in-python
     # redirecting stdout to dev null so no click.echo is displayed
     if no_stdout:
-        f = open(os.devnull, 'w')
-        sys.stdout = f
+        with open(os.devnull, 'w', encoding='utf-8') as _f:
+            sys.stdout = _f
 
     _fnc_name = cast(types.FrameType, inspect.currentframe()).f_code.co_name
-    _complete_doc = inspect.getdoc(eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307
+    _complete_doc = inspect.getdoc(literal_eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307
     _doc = f"{_complete_doc}".split('\n')[0]  # use only doc first row
     _str = f"{_doc[:-1]} - v{__version__}"
     click.echo(f"{_str}")
