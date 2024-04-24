@@ -1,3 +1,23 @@
+## 1.10.0 (2024-04-24)
+
+### Feat
+
+- new codecov action with secret token
+- dockerfile and github actions
+- add ruff linter
+- skip main branch, redirect stdout to /dev/null
+
+### Fix
+
+- remove python3.12
+- poetry call
+- tox for python 3.12
+- literla_eval break code
+- lint checks
+- alignment and latest python version
+- ruff linter errors
+- lxml clean splitted package
+
 ## 1.9.1 (2024-02-22)
 
 ### Fix
