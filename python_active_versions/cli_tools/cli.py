@@ -82,6 +82,7 @@ formatter_settings = HelpFormatter.settings(
 def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: bool):
     """Cli script to show which are currently active python versions.
 
+    \f
     Arguments:
         loglevel: set log level.
         docker: Include also info coming from docker's python active images.
