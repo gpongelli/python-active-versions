@@ -100,3 +100,37 @@ jobs:
           user: ${{ secrets.pypi_username }}
           password: ${{ secrets.pypi_password }}
           skip-existing: true
+
+      ########################
+      ## Docker image stage ##
+      ########################
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      ## ref. https://github.com/gpongelli/manylinux-python/blob/main/.github/workflows/build_manylinux.yml
+      # setup cross compilation action https://github.com/marketplace/actions/docker-setup-buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # login to docker action, to then push (in this case into python script) https://github.com/docker/login-action
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      # in case of static docker image building, https://github.com/marketplace/actions/docker-build-push-action
+      #  github action is better  ( https://github.com/docker/build-push-action )
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: gpongelli/python-active-versions:${{  github.ref_name }}
+
+      #  upload readme.md to dockerhub https://github.com/peter-evans/dockerhub-description
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: gpongelli/python-active-versions
