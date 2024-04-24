@@ -8,7 +8,6 @@ import inspect
 import os
 import sys
 import types
-from ast import literal_eval
 from typing import Any, Callable, TypeVar, cast
 
 import click
@@ -96,7 +95,7 @@ def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: 
             sys.stdout = _f
 
     _fnc_name = cast(types.FrameType, inspect.currentframe()).f_code.co_name
-    _complete_doc = inspect.getdoc(literal_eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307
+    _complete_doc = inspect.getdoc(eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307  # noqa: S307
     _doc = f"{_complete_doc}".split('\n')[0]  # use only doc first row
     _str = f"{_doc[:-1]} - v{__version__}"
     click.echo(f"{_str}")
