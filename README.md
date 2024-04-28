@@ -16,6 +16,32 @@ Gather active python versions and, optionally, also docker images.
 * PyPI: <https://pypi.org/project/python-active-versions/>
 * Free software: MIT
 
+## Usage
+
+For its usage, as CLI/docker container/library please refer to usega page into [documentation](https://gpongelli.github.io/python-active-versions).
+
+An interesting usage is in combination with nox, where this library can provide python versions as following snippet:
+
+```python
+import nox
+
+from python_active_versions.python_active_versions import get_active_python_versions
+from typing import List
+
+def _get_active_version(_active_versions: List[dict]) -> List[str]:
+    return [_av['version'] for _av in _active_versions]
+
+_python_versions = _get_active_version(get_active_python_versions())
+
+@nox.session(python=_python_versions)
+def test_something(session):
+    ...
+
+@nox.session(python=_python_versions)
+def test_another(session):
+    ...
+```
+
 
 ## Features
 
