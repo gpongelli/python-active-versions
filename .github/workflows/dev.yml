@@ -38,7 +38,7 @@ jobs:
         run: pipx install poetry
 
       # https://github.com/actions/setup-python
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-versions }}
           cache: 'poetry'
