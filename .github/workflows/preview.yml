@@ -22,23 +22,23 @@ jobs:
 
     strategy:
       matrix:
-        python-versions: [3.9]
+        python-versions: [3.11]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
       - name: Install Poetry
         run: pipx install poetry
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-versions }}
           cache: 'poetry'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m ensurepip --upgrade
           poetry install --with devel --sync
       #    pip install poetry tox tox-gh-actions
 
