@@ -91,8 +91,8 @@ def get_python_versions(loglevel: str, docker: bool, get_main: bool, no_stdout: 
     # https://stackoverflow.com/questions/6735917/redirecting-stdout-to-nothing-in-python
     # redirecting stdout to dev null so no click.echo is displayed
     if no_stdout:
-        with open(os.devnull, 'w', encoding='utf-8') as _f:
-            sys.stdout = _f
+        _f = open(os.devnull, 'w', encoding='utf-8')  # pylint: disable=consider-using-with
+        sys.stdout = _f
 
     _fnc_name = cast(types.FrameType, inspect.currentframe()).f_code.co_name
     _complete_doc = inspect.getdoc(eval(_fnc_name))  # pylint: disable=eval-used  # nosec B307  # noqa: S307
