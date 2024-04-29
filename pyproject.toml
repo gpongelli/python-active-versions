@@ -64,7 +64,11 @@
             mypy = "^0.961"
             pytest  = "^7.2.0"
             pytest-cov  = "^4.0.0"
-            tox  = "^3.25.0"
+            tox  = "^4.2.6"  # auto resolved for python>=3.7
+#[
+#                { version = "^4.15.0",  python = ">=3.9" },
+#                { version = "^3.25.0",  python = "<3.9" }
+#            ]
             virtualenv  = "^20.2.2"
             twine  = "^3.3.0"
             Sphinx = "4.2.0"
@@ -72,8 +76,11 @@
             sphinxcontrib-napoleon = "0.7"
             m2r2 = "0.3.2"
             pre-commit = "^2.12.0"
-            pytomlpp = "^1.0.11"
-            commitizen = "^2.32.2"
+            # pytomlpp = "^1.0.11"  # package not used
+            commitizen = [
+                { version = "^3.24.0", python = ">=3.8.0"},
+                { version = "^2.32.2", python = "<3.8.0"}
+            ]
             darglint = "^1.8.1"
             bandit = "^1.7.4"
             yamllint = "^1.26.3"
