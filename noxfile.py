@@ -143,7 +143,7 @@ def test(session):
     """Run tests."""
     _plat = sys.platform
 
-    print(f"py: {session.python} - plat: {_plat}")
+    # print(f"py: {session.python} - plat: {_plat}")
 
     if _plat == 'win32':
         _pyth = 'python'
