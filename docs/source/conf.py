@@ -19,7 +19,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from python_active_versions import __version__
+from python_active_versions import __version__, __author__, __project_name__
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -34,9 +34,9 @@ except FileNotFoundError:
 
 # -- Project information -----------------------------------------------------
 
-project = "python-active-versions"
-copyright = "2023, Gabriele Pongelli"
-author = "Gabriele Pongelli"
+project = __project_name__
+project_copyright = f"2023 - {os.environ['PY_PKG_YEAR']}, {__author__}"
+author = __author__
 
 # The full version, including alpha/beta/rc tags
 version = __version__
