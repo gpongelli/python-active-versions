@@ -1,3 +1,18 @@
+## 1.11.0 (2024-04-30)
+
+### Feat
+
+- use pytomlpp that's supported in python<3.11
+- remove python 3.7, older version supports it
+- remove tox in favor of nox
+
+### Fix
+
+- nox github command
+- ensure pip for py3.12 and update actions
+- python3.12 fixing call
+- revert change to avoid stream closed
+
 ## 1.10.0 (2024-04-24)
 
 ### Feat
