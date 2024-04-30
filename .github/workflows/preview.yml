@@ -42,9 +42,9 @@ jobs:
           poetry install --with devel --sync
       #    pip install poetry tox tox-gh-actions
 
-      - name: test with tox
+      - name: test with nox
         run:
-          poetry run tox -e py${{ matrix.python-versions }}
+          poetry run nox -e py${{ matrix.python-versions }}
 
       - name: Build wheels and source tarball
         run: |

@@ -71,9 +71,9 @@ Ready to contribute? Here's how to set up `python-active-versions` for local dev
    Now you can make your changes locally.
 
 6. When you're done making changes, check that your changes pass flake8 and
-   tests, including testing other Python versions, with tox:
+   tests, including testing other Python versions, with nox:
    ```bash
-   $ poetry run tox -e format -e lint
+   $ poetry run nox -e format -e lint
    ```
 
 7. Commit your changes and push your branch to GitHub:

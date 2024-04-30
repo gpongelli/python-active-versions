@@ -57,15 +57,15 @@ jobs:
       #    pip install poetry tox tox-gh-actions
 
       - name: build documentation
-        run: poetry run tox -e docs
+        run: poetry run nox -e docs
 
-      - name: linter checks with tox
+      - name: linter checks with nox
         run:
-          poetry run tox -e lint
+          poetry run nox -e lint
 
-      - name: test with tox
+      - name: test with nox
         run:
-          poetry run tox -e py${{ matrix.python-versions }}
+          poetry run nox -e py${{ matrix.python-versions }}
 
       - name: list files
         run: ls -l .
