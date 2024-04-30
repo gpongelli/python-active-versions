@@ -45,6 +45,7 @@
         requests-html = "^0.10.0"
         lxml_html_clean = "^0.1.1"
         beautifulsoup4 = "^4.12.0"
+        pytomlpp = "^1.0.13"
 
 
     [tool.poetry.group.devel]

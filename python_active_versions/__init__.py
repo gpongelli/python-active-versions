@@ -4,7 +4,7 @@
 
 """Top-level package for python active versions."""
 import logging
-import tomllib
+import pytomlpp
 
 from python_active_versions.bundle import get_bundle_dir
 
@@ -25,6 +25,6 @@ __description__ = None
 __project_name__ = None
 if not __description__ or not __project_name__:
     with open(get_bundle_dir() / 'pyproject.toml', "rb") as pyproj:
-        pyproject = tomllib.load(pyproj)
+        pyproject = pytomlpp.load(pyproj)
     __description__ = pyproject['tool']['poetry']['description']
     __project_name__ = pyproject['tool']['poetry']['name']
