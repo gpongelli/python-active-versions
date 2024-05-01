@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-
 # ref.  https://github.com/jmaupetit/md2pdf
 
 # -- Base image --

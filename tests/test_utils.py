@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 Gabriele Pongelli
+# SPDX-FileCopyrightText: 2022 - 2024 Gabriele Pongelli
 #
 # SPDX-License-Identifier: MIT
 

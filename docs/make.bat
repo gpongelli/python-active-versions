@@ -1,4 +1,4 @@
-REM SPDX-FileCopyrightText: 2023 Gabriele Pongelli
+REM SPDX-FileCopyrightText: 2023 - 2024 Gabriele Pongelli
 REM
 REM SPDX-License-Identifier: MIT
 

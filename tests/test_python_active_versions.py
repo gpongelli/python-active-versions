@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# SPDX-FileCopyrightText: 2023 Gabriele Pongelli
+# SPDX-FileCopyrightText: 2023 - 2024 Gabriele Pongelli
 #
 # SPDX-License-Identifier: MIT
 
