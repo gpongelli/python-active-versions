@@ -5,8 +5,6 @@
 """Top-level package for python active versions."""
 import logging
 
-from python_active_versions.bundle import get_bundle_dir
-
 try:
     from icecream import ic, install
 
