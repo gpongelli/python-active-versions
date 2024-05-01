@@ -1,3 +1,17 @@
+## 1.14.0 (2024-05-01)
+
+### Feat
+
+- align __init__.py with pyproject.toml during dev and not in built package
+- remove pyproject needs in built package
+
+### Fix
+
+- run isort and black
+- call same commands in CI/CD
+- use rtoml that does not need gcc and g++
+- docker image tag for local build
+
 ## 1.13.2 (2024-05-01)
 
 ### Fix
