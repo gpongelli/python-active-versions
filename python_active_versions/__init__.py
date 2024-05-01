@@ -19,7 +19,7 @@ except ImportError:  # Graceful fallback if IceCream isn't installed.
 
 __author__ = "Gabriele Pongelli"
 __email__ = "gabriele.pongelli@gmail.com"
-__version__ = "1.13.0"
+__version__ = "1.13.1"
 
 __description__ = None
 __project_name__ = None

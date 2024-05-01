@@ -1,3 +1,9 @@
+## 1.13.1 (2024-05-01)
+
+### Fix
+
+- github pages write permission
+
 ## 1.13.0 (2024-05-01)
 
 ### Feat
