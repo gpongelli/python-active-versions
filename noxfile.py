@@ -113,12 +113,29 @@ def lint(session):
     session.run("poetry", "run", "check-python-versions", ".", external=True, success_codes=[0, 1])
 
 
+def _build(session):
+    with open(get_bundle_dir() / 'pyproject.toml', "r") as pyproj:
+        pyproject = load(pyproj)
+    __description = pyproject['tool']['poetry']['description']
+    __project_name = pyproject['tool']['poetry']['name']
+
+    with fileinput.FileInput(get_bundle_dir() / 'python_active_versions/__init__.py', inplace=True) as f:
+        for line in f:
+            if line.startswith('__description__'):
+                print(f'__description__ = "{__description}"')
+            elif line.startswith("__project_name__"):
+                print(f'__project_name__ = "{__project_name}"')
+            else:
+                print(line, end='')
+    session.run("poetry", "build", external=True)
+    session.run("poetry", "run", "twine", "check", "dist/*", external=True)
+
+
 @nox.session
 def build(session):
     """Build package"""
     dev_commands(session)
-    session.run("poetry", "build", external=True)
-    session.run("poetry", "run", "twine", "check", "dist/*", external=True)
+    _build(session)
 
 
 @nox.session
@@ -152,9 +169,7 @@ def test(session):
     session.run("poetry", "env", "use", _pyth, external=True)
 
     dev_commands(session)
-
-    session.run("poetry", "build", external=True)
-    session.run("poetry", "run", "twine", "check", "dist/*", external=True)
+    _build(session)
     session.run("poetry", "install", external=True)
 
     if session.posargs:
@@ -174,7 +189,7 @@ def release(session):
     dev_commands(session)
 
     session.run("poetry", "run", "cz", "-nr", "3", "bump", "--changelog", "--yes", external=True)
-    session.run("poetry", "build", external=True)
+    _build(session)
     # session.run("poetry", "run", "PyInstaller", "python_active_versions.spec", external=True)
     # session.run("poetry", "publish", "-r", "...", external=True)
 
