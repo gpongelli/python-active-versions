@@ -182,5 +182,5 @@ def release(session):
 @nox.session(name='container')
 def container_build(session):
     session.run("poetry", "build", external=True)
-    session.run("podman", "build", "-t", f"python-active-version-{__version__}",
+    session.run("podman", "build", "-t", f"python-active-versions:{__version__}",
                 f"--build-arg=PKG_VERSION={__version__}", ".", external=True)

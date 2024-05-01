@@ -79,7 +79,6 @@
             sphinxcontrib-napoleon = "^0.7"
             m2r2 = "^0.3.2"
             pre-commit = "^2.12.0"
-            # pytomlpp = "^1.0.11"  # package not used
             commitizen = [
                 { version = "^3.25.0", python = ">=3.8.0"},
                 { version = "^2.32.2", python = "<3.8.0"}
