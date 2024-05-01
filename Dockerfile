@@ -15,7 +15,9 @@ RUN pip install --upgrade pip
 
 # Upgrade system packages to install security updates
 RUN apt update && \
-    apt -y upgrade
+    apt -y upgrade && \
+    apt -y install g++ gcc
+    # g++ and gcc needed by pytomlpp
 
 # -- Builder --
 FROM base as builder
@@ -29,9 +31,12 @@ ENV PATH  $PATH:/root/.local/bin
 # Install poetry
 RUN pip install pipx && \
     pipx install poetry
+
+ARG PKG_VERSION
+
 # Build and install package
 RUN poetry build && \
-    pip install dist/*.whl
+    pip install dist/*-$PKG_VERSION-*.whl
 
 # -- Core --
 FROM base as core
