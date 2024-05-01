@@ -1,3 +1,13 @@
+## 1.13.0 (2024-05-01)
+
+### Feat
+
+- using github trusted publisher
+
+### Fix
+
+- github action upload pages
+
 ## 1.12.1 (2024-05-01)
 
 ### Fix
