@@ -14,6 +14,7 @@ Gather active python versions and, optionally, also docker images.
 * Documentation: <https://gpongelli.github.io/python-active-versions>
 * GitHub: <https://github.com/gpongelli/python-active-versions>
 * PyPI: <https://pypi.org/project/python-active-versions/>
+* Docker image [here](https://hub.docker.com/r/gpongelli/python-active-versions)
 * Free software: MIT
 
 ## Usage
