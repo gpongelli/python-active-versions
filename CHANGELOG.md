@@ -1,3 +1,16 @@
+## 1.12.0 (2024-05-01)
+
+### Feat
+
+- license update
+- new workflow to test container build
+- pass tag as PKG_VERSION to docker image
+- new nox session to build container
+
+### Fix
+
+- missing package to build pytomlpp into container
+
 ## 1.11.0 (2024-04-30)
 
 ### Feat
