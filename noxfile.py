@@ -7,6 +7,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from python_active_versions.python_active_versions import get_active_python_versions
+from python_active_versions import __version__
 from typing import List
 
 
@@ -181,3 +182,10 @@ def release(session):
     session.run("poetry", "build", external=True)
     # session.run("poetry", "run", "PyInstaller", "python_active_versions.spec", external=True)
     # session.run("poetry", "publish", "-r", "...", external=True)
+
+
+@nox.session(name='container')
+def container_build(session):
+    session.run("poetry", "build", external=True)
+    session.run("podman", "build", "-t", f"python-active-version-{__version__}",
+                f"--build-arg=PKG_VERSION={__version__}", ".", external=True)
