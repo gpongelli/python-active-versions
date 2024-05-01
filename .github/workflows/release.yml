@@ -29,6 +29,13 @@ jobs:
     name: Create Release
     runs-on: ubuntu-20.04
 
+    # Trusted Publisher: Specifying a GitHub environment is optional, but strongly encouraged
+    #  needed setup @ pypi project's page
+    environment: release
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+
     strategy:
       matrix:
         python-versions: [3.11]
@@ -97,8 +104,6 @@ jobs:
       - name: publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: ${{ secrets.pypi_username }}
-          password: ${{ secrets.pypi_password }}
           skip-existing: true
 
       ########################
