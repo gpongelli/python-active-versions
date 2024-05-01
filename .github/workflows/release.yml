@@ -82,7 +82,7 @@ jobs:
 
       - name: Build wheels and source tarball
         run: >-
-          poetry build
+          poetry run nox -e build
 
       - name: show temporary files
         run: >-

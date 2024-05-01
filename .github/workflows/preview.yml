@@ -50,7 +50,7 @@ jobs:
         run: |
           poetry version $(poetry version --short)-dev.$GITHUB_RUN_NUMBER
           poetry version --short
-          poetry build
+          poetry run nox -e build
 
       # https://github.com/pypa/gh-action-pypi-publish
       # different account
