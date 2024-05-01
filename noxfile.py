@@ -2,13 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 
-import nox
+import fileinput
 import sys
 from datetime import datetime
 from pathlib import Path
-from python_active_versions.python_active_versions import get_active_python_versions
-from python_active_versions import __version__
 from typing import List
+
+import nox
+from rtoml import load
+
+from python_active_versions import __version__
+from python_active_versions.bundle import get_bundle_dir
+from python_active_versions.python_active_versions import get_active_python_versions
 
 
 def dev_commands(session):
@@ -25,10 +30,8 @@ def dev_commands(session):
 def format_code(session):
     """Format the code"""
     dev_commands(session)
-    session.run("poetry", "run", "isort", "python_active_versions", "tests",
-                external=True)
-    session.run("poetry", "run", "black", "python_active_versions", "tests",
-                external=True)
+    session.run("poetry", "run", "isort", "python_active_versions", "tests", "docs", "noxfile.py", external=True)
+    session.run("poetry", "run", "black", "python_active_versions", "tests", "docs", "noxfile.py", external=True)
 
 
 @nox.session(name='license')
@@ -49,9 +52,18 @@ def update_license(session):
     _py.extend(list(Path().glob('./docs/make.bat')))
     _py.extend(list(Path().glob('./pyproject.toml')))
     if _py:
-        session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", *_py,
-                    external=True)
+        session.run(
+            "poetry",
+            "run",
+            "reuse",
+            "annotate",
+            "--license=MIT",
+            "--copyright=Gabriele Pongelli",
+            f"--year={_year}",
+            "--merge-copyrights",
+            *_py,
+            external=True,
+        )
 
     # dot-file license
     session.log('dot-file license')
@@ -63,12 +75,22 @@ def update_license(session):
     _dot.extend(list(Path().glob('./**/*.lock')))
     _dot.extend(list(Path().glob('./**/*.cfg')))
     _dot.extend(list(Path().glob('./**/py.typed')))
-    _v_not_nox = [x for x in _dot if not x.parts[0].startswith(".nox") ]
+    _v_not_nox = [x for x in _dot if not x.parts[0].startswith(".nox")]
     _v_not_gen = [x for x in _v_not_nox if '_generated' not in x.parts]
     if _v_not_gen:
-        session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", "--force-dot-license", *_v_not_gen,
-                    external=True)
+        session.run(
+            "poetry",
+            "run",
+            "reuse",
+            "annotate",
+            "--license=MIT",
+            "--copyright=Gabriele Pongelli",
+            f"--year={_year}",
+            "--merge-copyrights",
+            "--force-dot-license",
+            *_v_not_gen,
+            external=True,
+        )
 
     # dot-files - forced python style
     session.log('forced python style')
@@ -78,9 +100,20 @@ def update_license(session):
     _dot_files.extend(list(Path().glob('./.pre-commit-config.yaml')))
     _dot_files.extend(list(Path().glob('./Dockerfile')))
     if _dot_files:
-        session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", "--style", "python", *_dot_files,
-                    external=True)
+        session.run(
+            "poetry",
+            "run",
+            "reuse",
+            "annotate",
+            "--license=MIT",
+            "--copyright=Gabriele Pongelli",
+            f"--year={_year}",
+            "--merge-copyrights",
+            "--style",
+            "python",
+            *_dot_files,
+            external=True,
+        )
 
     # download license
     session.run("poetry", "run", "reuse", "download", "--all", external=True)
@@ -89,7 +122,11 @@ def update_license(session):
     with Path(Path.cwd() / 'LICENSES/MIT.txt') as f:
         session.log('license files')
         _text = f.read_text()
-        _new_text = _text.replace('2023 Gabriele Pongelli', f'2023 - {_year} Gabriele Pongelli').replace('<year>', '2023').replace('<copyright holders>', 'Gabriele Pongelli')
+        _new_text = (
+            _text.replace('2023 Gabriele Pongelli', f'2023 - {_year} Gabriele Pongelli')
+            .replace('<year>', '2023')
+            .replace('<copyright holders>', 'Gabriele Pongelli')
+        )
         f.write_text(_new_text)
 
 
@@ -143,8 +180,17 @@ def docs(session):
     """Build docs"""
     dev_commands(session)
 
-    session.run("poetry", "run", "sphinx-build", "-b", "html", "docs/source/", "docs/build/html",
-                env={'PY_PKG_YEAR': str(datetime.now().year)}, external=True)
+    session.run(
+        "poetry",
+        "run",
+        "sphinx-build",
+        "-b",
+        "html",
+        "docs/source/",
+        "docs/build/html",
+        env={'PY_PKG_YEAR': str(datetime.now().year)},
+        external=True,
+    )
 
 
 def _get_active_version(_active_versions: List[dict]) -> List[str]:
@@ -179,8 +225,15 @@ def test(session):
         # call nox without arguments
         test_files = list(Path().glob('./tests/*.py'))
 
-    session.run('poetry', 'run', 'pytest', *test_files, f"--cov-report=html:html_coverage_{session.name}",
-                f"--cov-report=xml:xml_coverage_{session.name}.xml", external=True)
+    session.run(
+        'poetry',
+        'run',
+        'pytest',
+        *test_files,
+        f"--cov-report=html:html_coverage_{session.name}",
+        f"--cov-report=xml:xml_coverage_{session.name}.xml",
+        external=True,
+    )
 
 
 @nox.session
@@ -196,6 +249,13 @@ def release(session):
 
 @nox.session(name='container')
 def container_build(session):
-    session.run("poetry", "build", external=True)
-    session.run("podman", "build", "-t", f"python-active-versions:{__version__}",
-                f"--build-arg=PKG_VERSION={__version__}", ".", external=True)
+    _build(session)
+    session.run(
+        "podman",
+        "build",
+        "-t",
+        f"python-active-versions:{__version__}",
+        f"--build-arg=PKG_VERSION={__version__}",
+        ".",
+        external=True,
+    )

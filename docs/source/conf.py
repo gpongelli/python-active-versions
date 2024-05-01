@@ -19,7 +19,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from python_active_versions import __version__, __author__, __project_name__
+from python_active_versions import __author__, __project_name__, __version__
 
 sys.path.insert(0, os.path.abspath("."))
 
