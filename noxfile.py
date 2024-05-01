@@ -31,71 +31,66 @@ def format_code(session):
                 external=True)
 
 
-@nox.session
+@nox.session(name='license')
 def update_license(session):
     """License files according to REUSE 3.0"""
     dev_commands(session)
     _year = str(datetime.now().year)
 
-    # python files
-    _py = list(Path().glob('./python_active_versions/*.py'))
-    _py = list(Path().glob('./*.py'))
+    # files correctly managed by reuse from their extension
+    session.log('files recognized by extension')
+    _py = list(Path().glob('./python_active_versions/**/*.py'))
+    _py.extend(Path().glob('./*.py'))
     _py.extend(list(Path().glob('./tests/*.py')))
-    _py.extend(list(Path().glob('./docs/*.py')))
-    _absolute = list(map(lambda x: x.absolute(), _py))
-    if _absolute:
+    _py.extend(list(Path().glob('./docs/**/*.py')))
+    _py.extend(list(Path().glob('./.github/**/*.yml')))
+    _py.extend(Path().glob('./.github/**/*.yaml'))
+    _py.extend(list(Path().glob('./docs/Makefile')))
+    _py.extend(list(Path().glob('./docs/make.bat')))
+    _py.extend(list(Path().glob('./pyproject.toml')))
+    if _py:
         session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", *_absolute,
+                    f"--year={_year}", "--merge-copyrights", *_py,
                     external=True)
 
-    # json dotted license
+    # dot-file license
+    session.log('dot-file license')
     _dot = list(Path().glob('./python_active_versions/*.json'))
     _dot.extend(list(Path().glob('./tests/*.json')))
     _dot.extend(list(Path().glob('./docs/*.json')))
-    if _dot:
+    _dot.extend(list(Path().glob('./**/*.rst')))
+    _dot.extend(list(Path().glob('./**/*.md')))
+    _dot.extend(list(Path().glob('./**/*.lock')))
+    _dot.extend(list(Path().glob('./**/*.cfg')))
+    _dot.extend(list(Path().glob('./**/py.typed')))
+    _v_not_nox = [x for x in _dot if not x.parts[0].startswith(".nox") ]
+    _v_not_gen = [x for x in _v_not_nox if '_generated' not in x.parts]
+    if _v_not_gen:
         session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", "--force-dot-license", *_dot,
+                    f"--year={_year}", "--merge-copyrights", "--force-dot-license", *_v_not_gen,
                     external=True)
 
-    # yaml - md
-    _yaml = list(Path().glob('./github/*.yml'))
-    _yaml.extend(list(Path().glob('./github/*.md')))
-    _yaml.extend(list(Path().glob('./docs/Makefile')))
-    _yaml.extend(list(Path().glob('./docs/make.bat')))
-    _yaml.extend(list(Path().glob('./pyproject.toml')))
-    if _yaml:
-        session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", *_yaml,
-                    external=True)
-
-    # dot-files
+    # dot-files - forced python style
+    session.log('forced python style')
     _dot_files = list(Path().glob('./.editorconfig'))
     _dot_files.extend(list(Path().glob('./.gitignore')))
     _dot_files.extend(list(Path().glob('./.yamllint')))
     _dot_files.extend(list(Path().glob('./.pre-commit-config.yaml')))
+    _dot_files.extend(list(Path().glob('./Dockerfile')))
     if _dot_files:
         session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
                     f"--year={_year}", "--merge-copyrights", "--style", "python", *_dot_files,
                     external=True)
 
-    # various files
-    _various = list(Path().glob('./*.rst'))
-    _various.extend(list(Path().glob('./*.md')))
-    _various.extend(list(Path().glob('./*.lock')))
-    _various.extend(list(Path().glob('./*.cfg')))
-    if _various:
-        session.run("poetry", "run", "reuse", "annotate", "--license=MIT", "--copyright=Gabriele Pongelli",
-                    f"--year={_year}", "--merge-copyrights", "--force-dot-license", *_various,
-                    external=True)
-
     # download license
-    session.run("poetry", "run", "reuse", "download", "--all")
+    session.run("poetry", "run", "reuse", "download", "--all", external=True)
 
     # fix license file
     with Path(Path.cwd() / 'LICENSES/MIT.txt') as f:
+        session.log('license files')
         _text = f.read_text()
-        _text.replace('2023 Gabriele Pongelli', f'2023 - {_year} Gabriele Pongelli').replace('<year>', '2023').replace('<copyright holders>', 'Gabriele Pongelli')
-        f.write_text(_text)
+        _new_text = _text.replace('2023 Gabriele Pongelli', f'2023 - {_year} Gabriele Pongelli').replace('<year>', '2023').replace('<copyright holders>', 'Gabriele Pongelli')
+        f.write_text(_new_text)
 
 
 @nox.session
