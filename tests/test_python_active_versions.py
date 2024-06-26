@@ -6,17 +6,20 @@
 
 """Tests for `python_active_versions` package."""
 
+import logging
 from unittest.mock import patch
 
 from python_active_versions import __version__
 from python_active_versions.cli_tools.cli import get_python_versions
+
+logger = logging.getLogger(__name__)
 
 
 def test_py_version():
     """Dummy test to print python version used by pytest."""
     import sys
 
-    print(f"in TEST: {sys.version}  -- {sys.version_info}")
+    logger.info(f"in TEST: {sys.version}  -- {sys.version_info}")
     # if sys.version_info <= (3, 9, 18):
     #     # 3.9 OK
     #     assert True
