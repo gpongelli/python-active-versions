@@ -7,10 +7,14 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List
 
-import requests
-from requests_html import HTMLSession
+from requests_cache import CacheMixin
+from requests_html import HTMLResponse, HTMLSession
 
 from python_active_versions.utility import configure_logger
+
+
+class CachedHTMLSession(CacheMixin, HTMLSession):  # pylint: disable=W0223
+    """Session with features from both CachedSession and HTMLSession."""
 
 
 def _fetch_tags(package: str, version: str) -> List:
@@ -27,9 +31,10 @@ def _fetch_tags(package: str, version: str) -> List:
 
     _next_page = True
     _page = 1
+    session = CachedHTMLSession(backend='sqlite', cache_control=True, expire_after=604800)  # one week
     while _next_page:
         logging.info("Fetching docker tags for %s %s , page %s", package, version, _page)
-        result = requests.get(
+        result = session.get(
             f"https://registry.hub.docker.com/v2/repositories/library/{package}/tags?name={version}&page={_page}",
             timeout=120,
         )
@@ -59,13 +64,14 @@ def get_active_python_versions(
     versions = []
     version_table_selector = "#status-of-python-versions table"
 
-    _r = HTMLSession().get("https://devguide.python.org/versions/")
-    version_table = _r.html.find(version_table_selector, first=True)
+    session = CachedHTMLSession(backend='sqlite', cache_control=True, expire_after=604800)  # one week
+    _versions: HTMLResponse = session.get("https://devguide.python.org/versions/")
+    version_table = _versions.html.find(version_table_selector, first=True)
 
     # match development information with the latest downloadable release
     _py_specific_release = ".download-list-widget li"
-    _r = HTMLSession().get("https://www.python.org/downloads/")
-    spec_table = _r.html.find(_py_specific_release)
+    _downloads: HTMLResponse = session.get("https://www.python.org/downloads/")
+    spec_table = _downloads.html.find(_py_specific_release)
     _downloadable_versions = [li.find('span a', first=True).text.split(' ')[1] for li in spec_table]
 
     def worker(ver, no_main_branch):
