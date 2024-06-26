@@ -162,7 +162,7 @@ def lint(session):
     session.run("poetry", "run", "pylint", "python_active_versions", external=True)
     session.run("poetry", "run", "darglint", "-v", "2", "python_active_versions", external=True)
     session.run("poetry", "run", "bandit", "-r", "python_active_versions", external=True)
-    session.run("poetry", "run", "ruff", "check", "python_active_versions", "test", external=True)
+    session.run("poetry", "run", "ruff", "check", "python_active_versions", "tests", external=True)
     session.run("poetry", "run", "reuse", "lint", external=True)
     # session.run("poetry", "run", "python-active-versions", external=True)
     session.run("poetry", "run", "check-python-versions", ".", external=True, success_codes=[0, 1])
