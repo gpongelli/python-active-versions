@@ -147,7 +147,16 @@ def lint(session):
     session.run("poetry", "build", external=True)
     session.run("poetry", "install", external=True)
     session.run("poetry", "run", "flake8", "python_active_versions", "tests", external=True, success_codes=[0, 1])
-    session.run("poetry", "run", "mypy", "--install-types", "python_active_versions", "tests", external=True, success_codes=[0, 1])
+    session.run(
+        "poetry",
+        "run",
+        "mypy",
+        "--install-types",
+        "python_active_versions",
+        "tests",
+        external=True,
+        success_codes=[0, 1],
+    )
     session.run("poetry", "run", "yamllint", "-f", "colored", "python_active_versions", external=True)
     session.run("poetry", "run", "codespell", "python_active_versions", "docs/source", external=True)
     session.run("poetry", "run", "pylint", "python_active_versions", external=True)
