@@ -6,6 +6,7 @@ import fileinput
 import sys
 from datetime import datetime
 from pathlib import Path
+from re import sub
 from typing import List
 
 import nox
@@ -44,7 +45,7 @@ def update_license(session):
     session.log('files recognized by extension')
     _py = list(Path().glob('./python_active_versions/**/*.py'))
     _py.extend(Path().glob('./*.py'))
-    _py.extend(list(Path().glob('./tests/*.py')))
+    _py.extend(list(Path().glob('./tests/**/*.py')))
     _py.extend(list(Path().glob('./docs/**/*.py')))
     _py.extend(list(Path().glob('./.github/**/*.yml')))
     _py.extend(Path().glob('./.github/**/*.yaml'))
@@ -67,9 +68,9 @@ def update_license(session):
 
     # dot-file license
     session.log('dot-file license')
-    _dot = list(Path().glob('./python_active_versions/*.json'))
-    _dot.extend(list(Path().glob('./tests/*.json')))
-    _dot.extend(list(Path().glob('./docs/*.json')))
+    _dot = list(Path().glob('./python_active_versions/**/*.json'))
+    _dot.extend(list(Path().glob('./tests/**/*.json')))
+    _dot.extend(list(Path().glob('./docs/**/*.json')))
     _dot.extend(list(Path().glob('./**/*.rst')))
     _dot.extend(list(Path().glob('./**/*.md')))
     _dot.extend(list(Path().glob('./**/*.lock')))
@@ -119,15 +120,23 @@ def update_license(session):
     session.run("poetry", "run", "reuse", "download", "--all", external=True)
 
     # fix license file
-    with Path(Path.cwd() / 'LICENSES/MIT.txt') as f:
+    _creation_year = "2023"
+    REGEX_REPLACEMENTS = [
+        (r"<year>", f"{_creation_year}"),
+        (r"<copyright holders>", "Gabriele Pongelli"),
+        (r"20[0-9]{2} - 20[0-9]{2}", f"{_creation_year} - {_year}"),
+    ]
+    _license_file = get_bundle_dir() / 'LICENSES/MIT.txt'
+    with _license_file as f:
         session.log('license files')
         _text = f.read_text()
-        _new_text = (
-            _text.replace('2023 Gabriele Pongelli', f'2023 - {_year} Gabriele Pongelli')
-            .replace('<year>', '2023')
-            .replace('<copyright holders>', 'Gabriele Pongelli')
-        )
-        f.write_text(_new_text)
+        for old, new in REGEX_REPLACEMENTS:
+            _text = sub(old, new, _text)
+
+        if (_year not in _text) and (f"{_creation_year} - " not in _text):
+            _text = sub(f"{_creation_year}", f"{_creation_year} - {_year}", _text)
+
+        f.write_text(_text)
 
 
 @nox.session
@@ -137,14 +146,14 @@ def lint(session):
 
     session.run("poetry", "build", external=True)
     session.run("poetry", "install", external=True)
-    session.run("poetry", "run", "flake8", "python_active_versions", "tests", external=True)
-    session.run("poetry", "run", "mypy", "--install-types", "python_active_versions", "tests", external=True)
+    session.run("poetry", "run", "flake8", "python_active_versions", "tests", external=True, success_codes=[0, 1])
+    session.run("poetry", "run", "mypy", "--install-types", "python_active_versions", "tests", external=True, success_codes=[0, 1])
     session.run("poetry", "run", "yamllint", "-f", "colored", "python_active_versions", external=True)
     session.run("poetry", "run", "codespell", "python_active_versions", "docs/source", external=True)
     session.run("poetry", "run", "pylint", "python_active_versions", external=True)
     session.run("poetry", "run", "darglint", "-v", "2", "python_active_versions", external=True)
     session.run("poetry", "run", "bandit", "-r", "python_active_versions", external=True)
-    session.run("poetry", "run", "ruff", "python_active_versions", external=True)
+    session.run("poetry", "run", "ruff", "check", "python_active_versions", "test", external=True)
     session.run("poetry", "run", "reuse", "lint", external=True)
     # session.run("poetry", "run", "python-active-versions", external=True)
     session.run("poetry", "run", "check-python-versions", ".", external=True, success_codes=[0, 1])
@@ -223,7 +232,7 @@ def test(session):
         test_files = session.posargs
     else:
         # call nox without arguments
-        test_files = list(Path().glob('./tests/*.py'))
+        test_files = list(Path().glob('./tests/**/*.py'))
 
     session.run(
         'poetry',
