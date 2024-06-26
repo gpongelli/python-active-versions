@@ -50,7 +50,7 @@ def test_version(runner):
     assert __version__ in result.output
 
 
-@patch('requests_html.HTMLSession.get')
+@patch('python_active_versions.python_active_versions.CachedHTMLSession.get')
 def test_api_calls(patched_get, runner):
     """Test API calls.
 
