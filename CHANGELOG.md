@@ -1,3 +1,17 @@
+## 1.15.0 (2024-06-26)
+
+### Feat
+
+- reuse for cache's sqlite file
+- use cache for requests call
+
+### Fix
+
+- tests
+- lint errors
+- avoid clas between python and docker base OS version
+- search into subfolders for reuse tool
+
 ## 1.14.1 (2024-05-01)
 
 ### Fix
