@@ -268,7 +268,23 @@ def release(session):
 
 @nox.session(name='container')
 def container_build(session):
-    _build(session)
+    session.run(
+        "podman",
+        "run",
+        "--rm",
+        "-it",
+        "-v",
+        "Dockerfile:/Dockerfile",
+        "-v",
+        "hadolint.yaml:/hadolint.yaml",
+        "ghcr.io/hadolint/hadolint",
+        "hadolint",
+        "--config",
+        "/hadolint.yaml",
+        "/Dockerfile",
+        external=True,
+    )
+
     session.run(
         "podman",
         "build",

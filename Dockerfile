@@ -7,7 +7,19 @@
 # -- Base image --
 FROM python:3.12-slim as base
 
-MAINTAINER Gabriele Pongelli <gabriele.pongelli@gmail.com>
+ARG PKG_VERSION
+
+# https://snyk.io/blog/how-and-when-to-use-docker-labels-oci-container-annotations/
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+LABEL org.opencontainers.image.created=2024-07-09T23:20:50.52Z
+LABEL org.opencontainers.image.authors="Gabriele Pongelli <gabriele.pongelli@gmail.com>"
+LABEL org.opencontainers.image.version="${PKG_VERSION}"
+LABEL org.opencontainers.image.licenses=MIT
+LABEL org.opencontainers.image.documentation="https://gpongelli.github.io/python-active-versions/"
+LABEL org.opencontainers.image.source="https://github.com/gpongelli/python-active-versions"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/gpongelli/python-active-versions"
+LABEL org.opencontainers.image.revision=738e35c1b087704f043b424a3e3831997895cc3b
+LABEL org.opencontainers.image.description="Gather active python versions."
 
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
@@ -15,7 +27,8 @@ RUN pip install --upgrade pip
 # Upgrade system packages to install security updates
 RUN apt update && \
     apt -y upgrade && \
-    apt -y install g++ gcc
+    apt -y install g++ gcc && \
+    rm -rf /var/lib/apt/lists/*
     # g++ and gcc needed by pytomlpp
 
 # -- Builder --
