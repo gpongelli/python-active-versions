@@ -22,12 +22,12 @@ LABEL org.opencontainers.image.revision=738e35c1b087704f043b424a3e3831997895cc3b
 LABEL org.opencontainers.image.description="Gather active python versions."
 
 # Upgrade pip to its latest release to speed up dependencies installation
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip==24.0
 
 # Upgrade system packages to install security updates
-RUN apt update && \
-    apt -y upgrade && \
-    apt -y install g++ gcc && \
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y --no-install-recommends install g++ gcc && \
     rm -rf /var/lib/apt/lists/*
     # g++ and gcc needed by pytomlpp
 
@@ -41,14 +41,14 @@ COPY . /build/
 ENV PATH  $PATH:/root/.local/bin
 
 # Install poetry
-RUN pip install pipx && \
+RUN pip install --no-cache-dir pipx && \
     pipx install poetry
 
 ARG PKG_VERSION
 
 # Build and install package
 RUN poetry build && \
-    pip install dist/*-$PKG_VERSION-*.whl
+    pip install --no-cache-dir dist/*-$PKG_VERSION-*.whl
 
 # -- Core --
 FROM base as core

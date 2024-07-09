@@ -1,4 +1,4 @@
-failure-threshold: warning
+failure-threshold: info
 
 strict-labels: true
 label-schema:
