@@ -118,3 +118,6 @@ ENV/
 
 # mkdocs build dir
 site/
+
+# httpcache sqlite file
+/**/*.sqlite
