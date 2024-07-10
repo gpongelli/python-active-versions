@@ -144,9 +144,8 @@ def update_license(session):
 @nox.session
 def lint(session):
     """Lint the code"""
-    dev_commands(session)
+    build(session)
 
-    session.run("poetry", "build", external=True)
     session.run("poetry", "install", external=True)
     session.run("poetry", "run", "flake8", "python_active_versions", "tests", external=True, success_codes=[0, 1])
     session.run(
@@ -246,8 +245,7 @@ def test(session):
 
     session.run("poetry", "env", "use", _pyth, external=True)
 
-    dev_commands(session)
-    _build(session)
+    build(session)
     session.run("poetry", "install", external=True)
 
     if session.posargs:
