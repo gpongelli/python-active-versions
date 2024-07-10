@@ -3,8 +3,9 @@
 # SPDX-License-Identifier: MIT
 
 import fileinput
+import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from re import sub
 from typing import List
@@ -169,11 +170,23 @@ def lint(session):
     session.run("poetry", "run", "check-python-versions", ".", external=True, success_codes=[0, 1])
 
 
-def _build(session):
+def _gather_pyproject_data():
     with open(get_bundle_dir() / 'pyproject.toml', "r") as pyproj:
         pyproject = load(pyproj)
-    __description = pyproject['tool']['poetry']['description']
-    __project_name = pyproject['tool']['poetry']['name']
+    return {
+        'description': pyproject['tool']['poetry']['description'],
+        'project_name': pyproject['tool']['poetry']['name'],
+        'source': pyproject['tool']['poetry']['repository'],
+        'doc': pyproject['tool']['poetry']['documentation'],
+        'license': pyproject['tool']['poetry']['license'],
+        'authors': ', '.join(pyproject['tool']['poetry']['authors']),
+    }
+
+
+def _build(session):
+    _d = _gather_pyproject_data()
+    __description = _d['description']
+    __project_name = _d['project_name']
 
     with fileinput.FileInput(get_bundle_dir() / 'python_active_versions/__init__.py', inplace=True) as f:
         for line in f:
@@ -268,6 +281,13 @@ def release(session):
 
 @nox.session(name='container')
 def container_build(session):
+    _d = _gather_pyproject_data()
+
+    git_hash = session.run(
+        "poetry", "run", "git", "rev-parse", "HEAD",
+        external=True, silent=True
+    )
+
     session.run(
         "podman",
         "run",
@@ -290,7 +310,15 @@ def container_build(session):
         "build",
         "-t",
         f"python-active-versions:{__version__}",
+        f"--build-arg=IMAGE_TIMESTAMP={datetime.now(timezone.utc).isoformat()}",
+        f"--build-arg=IMAGE_AUTHORS={_d['authors']}",
         f"--build-arg=PKG_VERSION={__version__}",
+        # f"--build-arg=IMAGE_LICENSE={_d['license']}",
+        # f"--build-arg=IMAGE_DOC={_d['doc']}",
+        # f"--build-arg=IMAGE_SRC={_d['source']}",
+        # f"--build-arg=IMAGE_URL={_d['docker_url']}",
+        f"--build-arg=IMAGE_GIT_HASH={git_hash.strip()}",
+        f"--build-arg=IMAGE_DESCRIPTION={_d['description']}",
         ".",
         external=True,
     )
