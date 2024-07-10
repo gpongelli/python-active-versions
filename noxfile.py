@@ -282,10 +282,7 @@ def release(session):
 def container_build(session):
     _d = _gather_pyproject_data()
 
-    git_hash = session.run(
-        "poetry", "run", "git", "rev-parse", "HEAD",
-        external=True, silent=True
-    )
+    git_hash = session.run("poetry", "run", "git", "rev-parse", "HEAD", external=True, silent=True)
 
     session.run(
         "podman",
