@@ -1,3 +1,16 @@
+## 1.16.0 (2024-07-10)
+
+### Feat
+
+- hadolint rules to match variable labels
+- container labels, fixed versions, remove unneeded packages
+- gather data and pass to podman label
+- hadolint tool into nox session with config
+
+### Fix
+
+- container execution docs
+
 ## 1.15.0 (2024-06-26)
 
 ### Feat
