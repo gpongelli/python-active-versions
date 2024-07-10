@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Gabriele Pongelli
+#
+# SPDX-License-Identifier: MIT
+
 failure-threshold: info
 
 strict-labels: true
