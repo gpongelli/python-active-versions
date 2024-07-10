@@ -43,6 +43,14 @@ def test_another(session):
     ...
 ```
 
+### Container usage
+
+This tool can also be run as container wiht:
+
+```bash
+podman run --rm python-active-versions:1.15.0
+```
+
 
 ## Features
 
