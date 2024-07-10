@@ -288,7 +288,7 @@ def container_build(session):
         "podman",
         "run",
         "--rm",
-        "-it",
+        # "-it",
         "-v",
         "Dockerfile:/Dockerfile",
         "-v",
