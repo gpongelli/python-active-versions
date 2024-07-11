@@ -9,7 +9,7 @@
     repository = "https://github.com/gpongelli/python-active-versions"
     documentation = "https://gpongelli.github.io/python-active-versions/"
     description = "Gather active python versions."
-    authors = ["Gabriele Pongelli <gabriele.pongelli@gmail.com>"]
+    authors = ["Gabriele Pongelli <gpongelli@users.noreply.github.com>"]
     readme = "README.md"
     license =  "MIT"
     # full classifier list can be found at https://pypi.org/classifiers/
