@@ -39,6 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m ensurepip --upgrade
+          poetry lock --no-update
           poetry install --with devel --sync
       #    pip install poetry tox tox-gh-actions
 
