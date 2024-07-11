@@ -1,3 +1,9 @@
+## 1.17.2 (2024-07-11)
+
+### Fix
+
+- poetry lock on github action to avoid error
+
 ## 1.17.1 (2024-07-11)
 
 ### Fix
