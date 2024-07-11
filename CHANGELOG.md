@@ -1,3 +1,14 @@
+## 1.17.0 (2024-07-11)
+
+### Feat
+
+- hadolint and docker parameter in github actions
+
+### Fix
+
+- remove interactive for CI/CD
+- poetry lock
+
 ## 1.16.1 (2024-07-10)
 
 ### Fix
