@@ -70,6 +70,13 @@ jobs:
           file: 'pyproject.toml'
           field: 'tool.poetry.description'
 
+      - name: get version from toml
+        uses: SebRollen/toml-action@v1.2.0
+        id: read_toml_version
+        with:
+          file: 'pyproject.toml'
+          field: 'tool.poetry.version'
+
       - name: Get Timestamp
         uses: nanzm/get-time-action@master
         id: build_timestamp
@@ -79,14 +86,14 @@ jobs:
 
       # in case of static docker image building, https://github.com/marketplace/actions/docker-build-push-action
       #  github action is better  ( https://github.com/docker/build-push-action )
-      - name: Build and push
+      - name: Build container
         uses: docker/build-push-action@v5
         with:
           push: false
           build-args: |
               IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }}
               IMAGE_AUTHORS=${{ join(steps.read_toml_authors.outputs.value, ', ') }}
-              PKG_VERSION=${{ github.sha }}
+              PKG_VERSION=${{ steps.read_toml_version.outputs.value }}
               IMAGE_GIT_HASH=${{ github.sha }}
               IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }}
           tags: gpongelli/python-active-versions:${{ github.sha }}
