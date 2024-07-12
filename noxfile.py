@@ -372,3 +372,13 @@ def container_build(session):
     #   -v ./trivy.yaml:/root/trivy.yaml aquasec/trivy:0.53.0 -c /root/trivy.yaml
     #   image gpongelli/python-active-versions:1.17.2"
 
+    session.run(
+        "podman",
+        "run",
+        "--rm",
+        "-e", "CI=true",
+        "-v", "/var/run/docker.sock:/var/run/docker.sock",
+        "wagoodman/dive:latest",
+        "python-active-versions:1.17.2",
+        external=True,
+    )
