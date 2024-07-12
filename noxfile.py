@@ -102,6 +102,7 @@ def update_license(session):
     _dot_files.extend(list(Path().glob('./.yamllint')))
     _dot_files.extend(list(Path().glob('./.pre-commit-config.yaml')))
     _dot_files.extend(list(Path().glob('./hadolint.yaml')))
+    _dot_files.extend(list(Path().glob('./trivy.yaml')))
     _dot_files.extend(list(Path().glob('./Dockerfile')))
     if _dot_files:
         session.run(
@@ -301,6 +302,26 @@ def container_build(session):
         external=True,
     )
 
+    # run trivy on local project
+    session.run(
+        "podman",
+        "run",
+        "-v",
+        "/var/run/docker.sock:/var/run/docker.sock",
+        "-v",
+        ".:/root/proj",
+        "-v",
+        "./trivy_cache:/root/.cache/",
+        "-v",
+        "./trivy.yaml:/root/trivy.yaml",
+        "aquasec/trivy:0.53.0",
+        "-c",
+        "/root/trivy.yaml",
+        "fs",
+        "/root/proj",
+        external=True,
+    )
+
     session.run(
         "podman",
         "build",
@@ -318,3 +339,36 @@ def container_build(session):
         ".",
         external=True,
     )
+
+    # save image as tar to be scanned by trivy
+    session.run(
+        "podman",
+        "save",
+        "-o",
+        f"python-active-versions-{__version__}.tar",
+        f"python-active-versions:{__version__}",
+        external=True,
+    )
+
+    # run trivy scan
+    session.run(
+        "podman",
+        "run",
+        "-v", "/var/run/docker.sock:/var/run/docker.sock",
+        "-v", ".:/root/proj",
+        "-v", "./trivy_cache:/root/.cache/",
+        "-v", "./trivy.yaml:/root/trivy.yaml",
+        "aquasec/trivy:0.53.0",
+        "-c", "/root/trivy.yaml",
+        "image",
+        "--input", f"/root/proj/python-active-versions-{__version__}.tar",
+        external=True,
+    )
+
+    os.remove(f"python-active-versions-{__version__}.tar")
+
+    # this works on downloaded images from dockerhub; only way to work on local built images is through tar file
+    # "podman run -v /var/run/docker.sock:/var/run/docker.sock -v ./trivy_cache:/root/.cache/
+    #   -v ./trivy.yaml:/root/trivy.yaml aquasec/trivy:0.53.0 -c /root/trivy.yaml
+    #   image gpongelli/python-active-versions:1.17.2"
+
