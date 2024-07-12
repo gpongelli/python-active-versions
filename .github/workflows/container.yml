@@ -54,3 +54,49 @@ jobs:
         uses: hadolint/hadolint-action@master
         with:
           dockerfile: "Dockerfile"
+
+      # build image and do trivy check
+      - name: get authors from toml
+        uses: SebRollen/toml-action@v1.2.0
+        id: read_toml_authors
+        with:
+          file: 'pyproject.toml'
+          field: 'tool.poetry.authors'
+
+      - name: get description from toml
+        uses: SebRollen/toml-action@v1.2.0
+        id: read_toml_descr
+        with:
+          file: 'pyproject.toml'
+          field: 'tool.poetry.description'
+
+      - name: Get Timestamp
+        uses: nanzm/get-time-action@master
+        id: build_timestamp
+        with:
+          timeZone: UTC
+          format: 'YYYY-MM-DDTHH:mm:ssZ'
+
+      - name: Build an image from Dockerfile
+        run: |
+          podman build -t gpongelli/python-active-versions:${{ github.sha }} \
+            --build-arg=IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }} \
+            --build-arg=IMAGE_AUTHORS=${{ steps.read_toml_authors.outputs.value }} \
+            --build-arg=PKG_VERSION=${{ github.sha }} \
+            --build-arg=IMAGE_GIT_HASH=${{ github.sha }} \
+            --build-arg=IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }} \
+            .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: 'gpongelli/python-active-versions:${{ github.sha }}'
+          trivy-config: trivy.yaml
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
