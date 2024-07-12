@@ -18,6 +18,7 @@ list-all-pkgs: true
 image:
   source:
     - podman
+    - docker
 
 scan:
   skip-dirs:
