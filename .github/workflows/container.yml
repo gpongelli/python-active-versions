@@ -77,15 +77,20 @@ jobs:
           timeZone: UTC
           format: 'YYYY-MM-DDTHH:mm:ssZ'
 
-      - name: Build an image from Dockerfile
-        run: |
-          podman build -t gpongelli/python-active-versions:${{ github.sha }} \
-            --build-arg=IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }} \
-            --build-arg=IMAGE_AUTHORS=${{ steps.read_toml_authors.outputs.value }} \
-            --build-arg=PKG_VERSION=${{ github.sha }} \
-            --build-arg=IMAGE_GIT_HASH=${{ github.sha }} \
-            --build-arg=IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }} \
-            .
+      # in case of static docker image building, https://github.com/marketplace/actions/docker-build-push-action
+      #  github action is better  ( https://github.com/docker/build-push-action )
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+          build-args: |
+              IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }}
+              IMAGE_AUTHORS=${{ steps.read_toml_authors.outputs.value }}
+              PKG_VERSION=${{ github.sha }}
+              IMAGE_GIT_HASH=${{ github.sha }}
+              IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }}
+          tags: gpongelli/python-active-versions:${{ github.ref_name }}
+
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.24.0
