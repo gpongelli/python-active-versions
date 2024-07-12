@@ -85,11 +85,11 @@ jobs:
           push: false
           build-args: |
               IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }}
-              IMAGE_AUTHORS=${{ steps.read_toml_authors.outputs.value }}
+              IMAGE_AUTHORS=${{ join(steps.read_toml_authors.outputs.value, ', ') }}
               PKG_VERSION=${{ github.sha }}
               IMAGE_GIT_HASH=${{ github.sha }}
               IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }}
-          tags: gpongelli/python-active-versions:${{ github.ref_name }}
+          tags: gpongelli/python-active-versions:${{ github.sha }}
 
 
       - name: Run Trivy vulnerability scanner
