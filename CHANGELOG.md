@@ -1,3 +1,19 @@
+## 1.18.0 (2024-07-15)
+
+### Feat
+
+- add dive tool
+- trivy on github action
+- trivy on local run
+- trivy config file and cache folder
+
+### Fix
+
+- github permission and action
+- load docker build to docker images
+- pass package version from pyproject
+- github action sha and join authors
+
 ## 1.17.2 (2024-07-11)
 
 ### Fix
