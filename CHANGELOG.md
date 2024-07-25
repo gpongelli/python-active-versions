@@ -1,3 +1,9 @@
+## 1.19.0 (2024-07-25)
+
+### Feat
+
+- convert data to json before joining
+
 ## 1.18.0 (2024-07-15)
 
 ### Feat

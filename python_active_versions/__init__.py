@@ -16,7 +16,7 @@ except ImportError:  # Graceful fallback if IceCream isn't installed.
 
 __author__ = "Gabriele Pongelli"
 __email__ = "gabriele.pongelli@gmail.com"
-__version__ = "1.18.0"
+__version__ = "1.19.0"
 
 __description__ = "Gather active python versions."
 __project_name__ = "python-active-versions"
