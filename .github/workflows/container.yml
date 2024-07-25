@@ -97,7 +97,7 @@ jobs:
           load: true
           build-args: |
               IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }}
-              IMAGE_AUTHORS=${{ join(steps.read_toml_authors.outputs.value, ', ') }}
+              IMAGE_AUTHORS=${{ join(fromJSON(steps.read_toml_authors.outputs.value), ', ') }}
               PKG_VERSION=${{ steps.read_toml_version.outputs.value }}
               IMAGE_GIT_HASH=${{ github.sha }}
               IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }}
