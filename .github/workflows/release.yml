@@ -155,7 +155,7 @@ jobs:
           push: true
           build-args: |
               IMAGE_TIMESTAMP=${{ steps.build_timestamp.outputs.time }}
-              IMAGE_AUTHORS=${{ steps.read_toml_authors.outputs.value }}
+              IMAGE_AUTHORS=${{ join(fromJSON(steps.read_toml_authors.outputs.value), ', ') }}
               PKG_VERSION=${{ github.ref_name }}
               IMAGE_GIT_HASH=${{ github.sha }}
               IMAGE_DESCRIPTION=${{ steps.read_toml_descr.outputs.value }}
